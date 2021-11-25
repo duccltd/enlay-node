@@ -1,0 +1,1 @@
+export { GetPromotablesPayload } from "./promotables";
