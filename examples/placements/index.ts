@@ -7,7 +7,7 @@ const app = express();
 
 const slotId = "aaf09d65-dd8a-43e3-a420-24abe8ca13f0";
 
-app.post("/enlay/products", async (req: Request, res: Response) => {
+app.post("/products", async (_req: Request, res: Response) => {
   const _placements = await enlay.createPlacements(slotId, {
     max: 1,
     unique: true,
