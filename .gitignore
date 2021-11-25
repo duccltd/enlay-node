@@ -118,3 +118,5 @@ dist
 .pnp.*
 
 examples/*/**/yarn.lock
+
+.DS_Store
