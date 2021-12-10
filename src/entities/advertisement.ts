@@ -1,4 +1,4 @@
-export interface Advertisement {
+export interface AdvertisementPayload {
   customFields: {
     id: string;
   };

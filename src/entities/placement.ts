@@ -1,4 +1,4 @@
-import { Advertisement } from "./advertisement";
+import { AdvertisementPayload } from "./advertisement";
 
 export interface PlacementPayload {
   /**
@@ -9,5 +9,5 @@ export interface PlacementPayload {
   /**
    * Advertisement information
    */
-  advertisement: Pick<Advertisement, "customFields">;
+  advertisement: Pick<AdvertisementPayload, "customFields">;
 }
