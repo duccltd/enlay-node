@@ -1,4 +1,4 @@
-import Enlay from "../../lib";
+import Enlay from "../../src";
 import express, { Request, Response } from "express";
 
 const enlay = new Enlay("api_token_123");

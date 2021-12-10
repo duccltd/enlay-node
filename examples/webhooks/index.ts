@@ -1,7 +1,7 @@
-import Enlay from "../../lib";
+import Enlay from "../../src";
 import express, { Request, Response } from "express";
-import { GetPromotablesPayload } from "../../lib/events";
-import { PromotablePayload } from "../../lib/entities";
+import { GetPromotablesPayload } from "../../src/events";
+import { PromotablePayload } from "../../src/entities";
 
 const enlay = new Enlay("api_token_123");
 

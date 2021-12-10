@@ -4,3 +4,4 @@ yarn.lock
 .gitignore
 examples
 .git
+src
