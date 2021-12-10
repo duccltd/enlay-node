@@ -19,9 +19,9 @@ interface EnlayRequests {
 class Enlay implements EnlayRequests {
   private readonly client: AxiosInstance;
 
-  constructor(apiToken: string) {
+  constructor(apiToken: string, baseUrl?: string) {
     this.client = axios.create({
-      baseURL: "https://api.enlay.io/graphql",
+      baseURL: baseUrl ?? "https://api.enlay.io/graphql",
       headers: {
         Authorization: apiToken,
       },
@@ -40,14 +40,14 @@ class Enlay implements EnlayRequests {
       method: "POST",
       data: {
         query: `
-            mutation CreatePlacement(
+            mutation CreatePlacements(
                 $slotId: String!,
                 $max: Integer,
                 $unique: Boolean,
                 $urlParameters: ![JSON!],
                 $httpHeaders: ![JSON!]
             ) {
-                createPlacement(input: {
+                createPlacements(input: {
                     slotId: $slotId
                     max: $max
                     unique: $unique
