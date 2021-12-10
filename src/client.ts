@@ -9,11 +9,32 @@ type CreatePlacementOptions = Partial<{
   httpHeaders: Record<string, string | number>;
 }>;
 
+type Error = {
+  message: string;
+  locations: any[];
+  path: string[];
+  extenstions: {
+    validation_errors: Record<string, string>;
+  };
+};
+
+type GraphQLResponse<QueryKey extends string, QueryResponse> = {
+  data: {
+    [key in QueryKey]: QueryResponse;
+  };
+  errors: Error[];
+};
+
 interface EnlayRequests {
   createPlacements: (
     slotId: string,
     options: CreatePlacementOptions
-  ) => Promise<PlacementPayload[]>;
+  ) => Promise<{
+    data: {
+      createPlacements: PlacementPayload[];
+    };
+    errors: any[];
+  }>;
 }
 
 class Enlay implements EnlayRequests {
@@ -35,8 +56,10 @@ class Enlay implements EnlayRequests {
   public async createPlacements(
     slotId: string,
     options: Partial<CreatePlacementOptions> = { max: 1, unique: true }
-  ): Promise<PlacementPayload[]> {
-    const { data } = await this.client.request<PlacementPayload[]>({
+  ): Promise<GraphQLResponse<"createPlacements", PlacementPayload[]>> {
+    const { data } = await this.client.request<
+      GraphQLResponse<"createPlacements", PlacementPayload[]>
+    >({
       method: "POST",
       data: {
         query: `
