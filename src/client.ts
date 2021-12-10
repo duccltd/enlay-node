@@ -42,7 +42,7 @@ class Enlay implements EnlayRequests {
         query: `
             mutation CreatePlacements(
                 $slotId: String!,
-                $max: Integer,
+                $max: Int,
                 $unique: Boolean
             ) {
                 createPlacements(input: {
