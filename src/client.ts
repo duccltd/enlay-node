@@ -43,16 +43,12 @@ class Enlay implements EnlayRequests {
             mutation CreatePlacements(
                 $slotId: String!,
                 $max: Integer,
-                $unique: Boolean,
-                $urlParameters: ![JSON!],
-                $httpHeaders: ![JSON!]
+                $unique: Boolean
             ) {
                 createPlacements(input: {
                     slotId: $slotId
                     max: $max
                     unique: $unique
-                    urlParameters: $urlParameters,
-                    httpHeaders: $httpHeaders
                 }) {
                     id
                     advertisement {
