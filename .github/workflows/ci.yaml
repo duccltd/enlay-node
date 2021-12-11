@@ -1,6 +1,8 @@
 name: Publish Package
 on:
   push:
+    paths:
+      - "package.json"
     branches:
       - "master"
 
