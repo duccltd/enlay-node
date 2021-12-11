@@ -4,7 +4,7 @@ JavaScript library for the Enlay API.
 
 ## Installation
 
-### yarn
+### Yarn
 
 ```sh-session
 yarn add @enlay/node
@@ -18,13 +18,13 @@ npm install @enlay/node
 
 ## Usage
 
-To be fully integrated with Enlay, we have composed a list of actionables below. These are essential for your integration to work.
+To be fully integrated with Enlay, we have composed a list of actionables below. These are essential for your integration to work. Currently, there are two implementations required, one for the backend and one for the frontend. On the backend we handle user product fetching and generating advertisement placements. Meanwhile, on the frontend, we register clicks and views of those products..
 
 ### Backend
 
-#### Creating the client
+#### Creating the enlay client
 
-You should not expose the Enlay client with your token to the client. You can find your token on the [publisher dashboard](https://publisher.enlay.io/publisher).
+You should not expose the Enlay client with your token to the user. You can find your token on the [publisher dashboard](https://publisher.enlay.io/publisher).
 
 ```ts
 // src/enlay/index.ts
@@ -39,7 +39,9 @@ export default enlay;
 
 #### Fetching advertisement placements
 
-The `slot-id ` can be found on your [publisher dashboard](https://publisher.enlay.io/publisher).
+A placement is an advertisement which is currently running. There are a few options you can provide to create placements to fit your own use case but in this example we fetch 2 unique on-going advertisements. From these placements, you can then extract your related resource ID through the custom fields as shown in the real world example.
+
+The `slot-id` can be found on your [publisher dashboard](https://publisher.enlay.io/publisher).
 
 ```ts
 // src/products.ts
@@ -59,14 +61,15 @@ app.get(`/products`, (req, res) => {
 });
 ```
 
-**Example** with data using knex
+**Real world advanced example** with data using knex.
+Typically, you might have another route to fetch sponsored products or an additional query param such as `/products?sponsored=true`. Although, in this example, it shows how you would attach sponsored products in with a regular product serving.
 
 ```ts
 // src/products.ts
 import enlay from "./enlay";
 
 app.get(`/products`, (req, res) => {
-  const products = await knex("products").select("*");
+  const products = await knex("products").select("*").limit(20);
 
   // Fetch the advertisement placements
   const { data, errors } = await enlay.createPlacements("slot-id", {
@@ -89,8 +92,8 @@ app.get(`/products`, (req, res) => {
 
   // Append placement identifier to product
   const sponsored = sponsoredProducts.map((product) => {
-    const placement = data.placements.find(
-      (p) => p.advertisement.customFields.id === product.id
+    const placement = data.createPlacements.find(
+      (placement) => placement.advertisement.customFields.id === product.id
     );
     return {
       ...product,
@@ -105,7 +108,7 @@ app.get(`/products`, (req, res) => {
 
 #### Creating webhook endpoint for fetching users promotables
 
-This endpoint is needed so we know what products an advertiser can sponsor on your platform.
+This endpoint is needed so we know what products an advertiser can sponsor on your platform. This will then be used when advertisers visit the whitelabelled Enlay platform to pick and choose which advertisement they want to promote.
 
 ```ts
 // src/enlay/products.ts
@@ -145,9 +148,9 @@ app.get(`/enlay/products`, (req, res) => {
 
 ### Frontend
 
-#### Creating the client
+#### Creating the enlay client
 
-Create the client without any parameters.
+Create the client without any options. This is **safe** to share as it does not have the API token attached.
 
 ```typescript
 // src/enlay/index.ts
@@ -160,7 +163,7 @@ export default enlay;
 
 #### Registering advertisement click
 
-Clicks are one of the core parts of the analytics for advertisers.
+Clicks are one of the core parts of the analytics for advertisers. In this example, it fires off a click on a product to enlay asynchronously.
 
 ```tsx
 import React from "react";
@@ -176,7 +179,7 @@ export default function Products() {
       {products.map((product) => (
         <Product
           product={product}
-          onClick={async () => {
+          onClick={() => {
             // Fire a placement click async
             if (product.placementId) {
               enlay.registerClick(product.placementId);
@@ -190,9 +193,9 @@ export default function Products() {
 }
 ```
 
-#### Registering advertisement view
+#### (Optional) Registering advertisement view
 
-Views are also core for advertisers as these are true impressions.
+Views are also core for advertisers as these are true impressions. In this example, on initial mount, we are registering views on all rendered products. This gives an advertiser and publisher insights on true impressions on products. In the future we hope to add more such as registering views when a product is scrolled into view etc.
 
 ```tsx
 import React, { useEffect } from "react";
