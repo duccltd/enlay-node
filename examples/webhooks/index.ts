@@ -12,7 +12,7 @@ app.post("/enlay/products", async (req: Request, res: Response) => {
 
   /*
   // Get users products by email
-  const { email } = event.data.advertiser;
+  const { email } = event.data.promotable.advertiser;
 
   const products = await Something.getProductsByEmail(email);
 
@@ -22,7 +22,6 @@ app.post("/enlay/products", async (req: Request, res: Response) => {
   }));
 
   return void res.json(payload);
-
   */
 
   /**

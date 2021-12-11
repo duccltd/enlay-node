@@ -6,11 +6,17 @@ enum WebhookType {
 
 type WebhookPayload = GetPromotablesPayload;
 
+type PayloadKey<T> = T extends GetPromotablesPayload ? "promotable" : never;
+
+type WebhookBase<P extends WebhookPayload> = {
+  [key in PayloadKey<P>]: P;
+};
+
 interface Webhook<T extends WebhookPayload> {
   id: string;
   timestamp: String;
   type: WebhookType;
-  data: T;
+  data: WebhookBase<T>;
 }
 
 const constructEvent = <T extends WebhookPayload>(
