@@ -1,6 +1,6 @@
 {
   "name": "@enlay/node",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "SDK to interact with Enlay",
   "main": "lib/index.js",
   "files": [
