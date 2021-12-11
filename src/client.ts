@@ -50,7 +50,7 @@ class Enlay implements EnlayRequests {
   private readonly client: AxiosInstance;
   private readonly apiToken?: string;
 
-  constructor(config: IEnlayConfig) {
+  constructor(config: IEnlayConfig = {}) {
     const { apiToken, baseUrl } = config;
 
     this.apiToken = apiToken;
