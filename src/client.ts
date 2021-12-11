@@ -68,6 +68,10 @@ class Enlay implements EnlayRequests {
     return Webhooks;
   }
 
+  /**
+   * Register a click on an advertisement
+   * @param placementId Placement id obtained from create placemens
+   */
   public async registerClick(placementId: string): Promise<void> {
     await this.client.request({
       method: "GET",
@@ -75,6 +79,26 @@ class Enlay implements EnlayRequests {
     });
   }
 
+  /**
+   *
+   * @param placementIds Placement ids obtained from create placements
+   */
+  public async registerView(placementIds: string[]): Promise<void> {
+    await this.client.request({
+      method: "POST",
+      url: `/p/v`,
+      data: placementIds.map((pid) => ({
+        id: pid,
+      })),
+    });
+  }
+
+  /**
+   *
+   * @param slotId Slot identifier obtained from publishers.enlay.io
+   * @param options Create placement options
+   * @returns Collection of placements
+   */
   public async createPlacements(
     slotId: string,
     options: Partial<CreatePlacementOptions> = { max: 1, unique: true }
