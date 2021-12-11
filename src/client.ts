@@ -37,6 +37,11 @@ interface EnlayRequests {
   }>;
 }
 
+interface IEnlayConfig {
+  apiToken?: string;
+  baseUrl?: string;
+}
+
 /**
  * @param {apiToken} API Token - This should not be exposed client side
  * @param {baseUrl} API Base
@@ -45,7 +50,9 @@ class Enlay implements EnlayRequests {
   private readonly client: AxiosInstance;
   private readonly apiToken?: string;
 
-  constructor(apiToken?: string, baseUrl?: string) {
+  constructor(config: IEnlayConfig) {
+    const { apiToken, baseUrl } = config;
+
     this.apiToken = apiToken;
     this.client = axios.create({
       baseURL: baseUrl ?? "https://api.enlay.io",
