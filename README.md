@@ -146,7 +146,7 @@ app.get(`/enlay/products`, (req, res) => {
 });
 ```
 
-### Frontend
+### Frontend (React - NextJS)
 
 #### Creating the enlay client
 
