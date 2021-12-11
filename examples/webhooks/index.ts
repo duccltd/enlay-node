@@ -3,7 +3,7 @@ import express, { Request, Response } from "express";
 import { GetPromotablesPayload } from "../../src/events";
 import { PromotablePayload } from "../../src/entities";
 
-const enlay = new Enlay("api_token_123");
+const enlay = new Enlay({ apiToken: "api_token_123" });
 
 const app = express();
 
