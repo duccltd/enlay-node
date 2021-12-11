@@ -24,9 +24,7 @@ const constructEvent = <T extends WebhookPayload>(
 ): Webhook<T> => {
   // TODO: Validate signature
 
-  const data = JSON.parse(String(body));
-
-  return data;
+  return body as any;
 };
 
 export { constructEvent };

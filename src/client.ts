@@ -37,15 +37,23 @@ interface EnlayRequests {
   }>;
 }
 
+/**
+ * @param {apiToken} API Token - This should not be exposed client side
+ * @param {baseUrl} API Base
+ */
 class Enlay implements EnlayRequests {
   private readonly client: AxiosInstance;
+  private readonly apiToken?: string;
 
-  constructor(apiToken: string, baseUrl?: string) {
+  constructor(apiToken?: string, baseUrl?: string) {
+    this.apiToken = apiToken;
     this.client = axios.create({
-      baseURL: baseUrl ?? "https://api.enlay.io/graphql",
-      headers: {
-        Authorization: apiToken,
-      },
+      baseURL: baseUrl ?? "https://api.enlay.io",
+      headers: apiToken
+        ? {
+            Authorization: apiToken,
+          }
+        : {},
     });
   }
 
@@ -53,14 +61,25 @@ class Enlay implements EnlayRequests {
     return Webhooks;
   }
 
+  public async registerClick(placementId: string): Promise<void> {
+    await this.client.request({
+      method: "GET",
+      url: `/p/${placementId}/c`,
+    });
+  }
+
   public async createPlacements(
     slotId: string,
     options: Partial<CreatePlacementOptions> = { max: 1, unique: true }
   ): Promise<GraphQLResponse<"createPlacements", PlacementPayload[]>> {
+    if (!this.apiToken) {
+      throw new Error("API Token is undefined in constructor.");
+    }
     const { data } = await this.client.request<
       GraphQLResponse<"createPlacements", PlacementPayload[]>
     >({
       method: "POST",
+      url: "/graphql",
       data: {
         query: `
             mutation CreatePlacements(
