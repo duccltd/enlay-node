@@ -122,6 +122,9 @@ class Enlay implements EnlayRequests {
                 }) {
                     id
                     advertisement {
+                        name
+                        description
+                        image_url
                         customFields
                     }
                 }
