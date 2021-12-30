@@ -103,9 +103,6 @@ class Enlay implements EnlayRequests {
     slotId: string,
     options: Partial<CreatePlacementOptions> = { max: 1, unique: true }
   ): Promise<GraphQLResponse<"createPlacements", PlacementPayload[]>> {
-    if (!this.apiToken) {
-      throw new Error("API Token is undefined in constructor.");
-    }
     const { data } = await this.client.request<
       GraphQLResponse<"createPlacements", PlacementPayload[]>
     >({

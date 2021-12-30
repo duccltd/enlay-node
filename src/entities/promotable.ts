@@ -1,3 +1,5 @@
+import { Nullable } from "../util";
+
 export interface PromotablePayload {
   /**
    * ID of the Promotable
@@ -8,4 +10,14 @@ export interface PromotablePayload {
    * Display name of the promotable to advertisers
    */
   display_name: string;
+
+  /**
+   * Description of the advertisement
+   */
+  description?: string;
+
+  /**
+   * Advertisement image
+   */
+  image_url?: string;
 }
