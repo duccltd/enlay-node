@@ -108,14 +108,14 @@ app.get(`/products`, (req, res) => {
 
 #### Creating webhook endpoint for fetching users promotables
 
-This endpoint is needed so we know what products an advertiser can sponsor on your platform. This will then be used when advertisers visit the whitelabelled Enlay platform to pick and choose which advertisement they want to promote.
+This endpoint is needed so we know what products an advertiser can sponsor on your platform. This will then be used when advertisers visit the whitelabelled Enlay platform to pick and choose which advertisement they want to promote. The url can be completely bespoke and is not limited to `/enlay/products`.
 
 ```ts
 // src/enlay/products.ts
 import enlay from "./enlay";
 import { Events, Entities } from "@enlay/node";
 
-app.get(`/enlay/products`, (req, res) => {
+app.post(`/enlay/products`, (req, res) => {
   // Construct the enlay event
   const {
     data: { promotable },
