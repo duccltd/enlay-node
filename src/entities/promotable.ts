@@ -8,4 +8,14 @@ export interface PromotablePayload {
    * Display name of the promotable to advertisers
    */
   display_name: string;
+
+  /**
+   * Description of the advertisement
+   */
+  description?: string;
+
+  /**
+   * Advertisement image
+   */
+  image_url?: string;
 }
