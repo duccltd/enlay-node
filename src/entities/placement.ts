@@ -9,5 +9,5 @@ export interface PlacementPayload {
   /**
    * Advertisement information
    */
-  advertisement: Pick<AdvertisementPayload, "customFields">;
+  advertisement: AdvertisementPayload;
 }

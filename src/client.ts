@@ -58,8 +58,8 @@ class Enlay implements EnlayRequests {
       baseURL: baseUrl ?? "https://api.enlay.io",
       headers: apiToken
         ? {
-            Authorization: apiToken,
-          }
+          Authorization: apiToken,
+        }
         : {},
     });
   }
@@ -124,7 +124,8 @@ class Enlay implements EnlayRequests {
                     advertisement {
                         name
                         description
-                        image_url
+                        imageUrl
+                        redirectUrl
                         customFields
                     }
                 }

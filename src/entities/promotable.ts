@@ -1,5 +1,3 @@
-import { Nullable } from "../util";
-
 export interface PromotablePayload {
   /**
    * ID of the Promotable

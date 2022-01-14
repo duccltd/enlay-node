@@ -13,6 +13,12 @@ export interface AdvertisementPayload {
    * Image url from promotable webhook or user input
    */
   imageUrl?: string;
+
+  /**
+   * Destination url
+   */
+  redirectUrl?: string;
+
   customFields: {
     id: string;
   };
