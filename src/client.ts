@@ -58,8 +58,8 @@ class Enlay implements EnlayRequests {
       baseURL: baseUrl ?? "https://api.enlay.io",
       headers: apiToken
         ? {
-            Authorization: apiToken,
-          }
+          Authorization: apiToken,
+        }
         : {},
     });
   }
@@ -257,9 +257,6 @@ class Enlay implements EnlayRequests {
     slotId: string,
     options: Partial<CreatePlacementOptions> = { max: 1, unique: true }
   ): Promise<GraphQLResponse<"createPlacements", PlacementPayload[]>> {
-    if (!this.apiToken) {
-      throw new Error("API Token is undefined in constructor.");
-    }
     const { data } = await this.client.request<
       GraphQLResponse<"createPlacements", PlacementPayload[]>
     >({
@@ -279,6 +276,10 @@ class Enlay implements EnlayRequests {
                 }) {
                     id
                     advertisement {
+                        name
+                        description
+                        imageUrl
+                        redirectUrl
                         customFields
                     }
                 }
