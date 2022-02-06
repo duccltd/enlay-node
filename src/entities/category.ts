@@ -8,4 +8,9 @@ export interface CategoryPayload {
    * Category name
    */
   name: string;
+
+  /**
+   * Category description
+   */
+  description: string;
 }

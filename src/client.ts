@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { PlacementPayload } from "./entities";
+import { SlotPayload, CategoryPayload, PlacementPayload } from "./entities";
 import * as Webhooks from "./webhooks";
 
 type CreatePlacementOptions = Partial<{
@@ -91,6 +91,160 @@ class Enlay implements EnlayRequests {
         id: pid,
       })),
     });
+  }
+
+  public async createAdvertiser(options: {
+    email: string;
+    external_user_id: string;
+  }): Promise<GraphQLResponse<"createAdvertiser", string>> {
+    if (!this.apiToken) {
+      throw new Error("API Token is undefined in constructor.");
+    }
+    const { data } = await this.client.request<
+      GraphQLResponse<"createAdvertiser", string>
+    >({
+      method: "POST",
+      url: "/graphql",
+      data: {
+        query: `
+          mutation CreateAdvertiser(
+            $metadata: JSON!
+          ) {
+            createAdvertiser(input: {
+              metadata: $metadata
+            })
+          }
+        `,
+        variables: {
+          metadata: options,
+        },
+      },
+    });
+
+    return data;
+  }
+
+  public async createAdvertisement(options: {
+    slotId: string;
+    name: string;
+    redirectUrl?: string;
+    description: string;
+    dailyBudget: number;
+    image?: File;
+  }): Promise<GraphQLResponse<"createAdvertisement", string>> {
+    if (!this.apiToken) {
+      throw new Error("API Token is undefined in constructor.");
+    }
+    const { data } = await this.client.request<
+      GraphQLResponse<"createAdvertisement", string>
+    >({
+      method: "POST",
+      url: "/graphql",
+      data: {
+        query: `
+           mutation CreateAdvertisement(
+                $slotId: String!,
+                $name: String!,
+                $redirectUrl: String,
+                $description: String!,
+                $dailyBudget: Int!,
+                $image: Upload
+            ) {
+              createAdvertisement(
+                input: {
+                  slotId: $slotId
+                  name: $name
+                  redirectUrl: $redirectUrl
+                  description: $description,
+                  dailyBudget: $dailyBudget,
+                }
+                image: $image
+              )
+            }
+            `,
+        variables: options,
+      },
+    });
+
+    return data;
+  }
+
+  public async getSlots(
+    categoryId: string,
+    filter: Partial<{
+      id: string;
+    }> = {}
+  ): Promise<GraphQLResponse<"findSlots", SlotPayload[]>> {
+    if (!this.apiToken) {
+      throw new Error("API Token is undefined in constructor.");
+    }
+    const { data } = await this.client.request<
+      GraphQLResponse<"findSlots", SlotPayload[]>
+    >({
+      method: "POST",
+      url: "/graphql",
+      data: {
+        query: `
+            query FindSlots(
+                $categoryId: String!,
+                $filter: JSON,
+            ) {
+                findSlots(input: {
+                    categoryId: $categoryId,
+                    filter: $filter
+                }) {
+                    id
+                    name
+                    description
+                    website
+                    status
+                }
+            }
+        `,
+        variables: {
+          categoryId,
+          filter,
+        },
+      },
+    });
+
+    return data;
+  }
+
+  public async getCategories(
+    filter: Partial<{
+      id: string;
+    }> = {}
+  ): Promise<GraphQLResponse<"findCategories", CategoryPayload[]>> {
+    if (!this.apiToken) {
+      throw new Error("API Token is undefined in constructor.");
+    }
+    const { data } = await this.client.request<
+      GraphQLResponse<"findCategories", CategoryPayload[]>
+    >({
+      method: "POST",
+      url: "/graphql",
+      data: {
+        query: `
+            query FindCategories(
+                $filter: JSON,
+            ) {
+                findCategories(input: {
+                    filter: $filter
+                }) {
+                    id
+                    name
+                    description
+                }
+            }
+        `,
+        variables: {
+          filter,
+        },
+      },
+    });
+
+    return data;
   }
 
   /**
