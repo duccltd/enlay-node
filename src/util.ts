@@ -13,5 +13,5 @@ export type OptionalAttrs<T, K extends keyof T = keyof T> = Pick<
   Partial<Pick<T, K>>;
 
 export type IgnoreAttrs<T, K extends keyof T = keyof T> = T & {
-  [];
+  [key in K]: never;
 };

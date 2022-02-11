@@ -1,13 +1,35 @@
 import { Nullable } from "../util";
 
-export interface AdvertiserPayload {
+interface APIOnlyMetaData {
   /**
    * Advertiser email
    */
   email: string;
 
   /**
-   * Advertiser discord identifier
+   * External user identifier
    */
-  discord_id: Nullable<string>;
+  externalUserId: string;
+
+  /**
+   * Created stripe customer identifier
+   */
+  stripeCustomerId: string;
+}
+
+export interface AdvertiserPayload {
+  /**
+   * Advertiser ID
+   */
+  id: string;
+
+  /**
+   * Balance
+   */
+  balance: number;
+
+  /**
+   * API Only meta data for advertisers
+   */
+  apiOnlyMetaData: Nullable<APIOnlyMetaData>;
 }

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { SlotPayload, CategoryPayload, PlacementPayload } from "./entities";
+import { SlotPayload, CategoryPayload, PlacementPayload, AdvertiserPayload, AdvertisementPayload } from "./entities";
 import * as Webhooks from "./webhooks";
 
 type CreatePlacementOptions = Partial<{
@@ -7,6 +7,34 @@ type CreatePlacementOptions = Partial<{
   unique: boolean;
   urlParameters: Record<string, string | number>;
   httpHeaders: Record<string, string | number>;
+}>;
+
+type CreateAdvertiserInput = {
+  email: string;
+  externalUserId: string;
+};
+
+type CreateAdvertisementInput = {
+  slotId: string;
+  name: string;
+  redirectUrl: string;
+  description: string;
+  dailyBudget: number;
+  advertiserId: string;
+  image: File;
+};
+
+type GetSlotsOptions = Partial<{
+  id: string;
+}>;
+
+type GetCategoriesOptions = Partial<{
+  id: string;
+}>;
+
+type FindAdvertisementsInput = Partial<{
+  id: string;
+  advertiserId: string;
 }>;
 
 type Error = {
@@ -47,7 +75,7 @@ interface IEnlayConfig {
  * @param {baseUrl} API Base
  */
 class Enlay implements EnlayRequests {
-  private readonly client: AxiosInstance;
+  public readonly client: AxiosInstance;
   private readonly apiToken?: string;
 
   constructor(config: IEnlayConfig = {}) {
@@ -58,8 +86,8 @@ class Enlay implements EnlayRequests {
       baseURL: baseUrl ?? "https://api.enlay.io",
       headers: apiToken
         ? {
-            Authorization: apiToken,
-          }
+          Authorization: apiToken,
+        }
         : {},
     });
   }
@@ -93,10 +121,12 @@ class Enlay implements EnlayRequests {
     });
   }
 
-  public async createAdvertiser(options: {
-    email: string;
-    external_user_id: string;
-  }): Promise<GraphQLResponse<"createAdvertiser", string>> {
+  /**
+   * 
+   * @param options Options for creating an advertiser
+   * @returns Advertiser object
+   */
+  public async createAdvertiser(options: CreateAdvertiserInput): Promise<GraphQLResponse<"createAdvertiser", string>> {
     if (!this.apiToken) {
       throw new Error("API Token is undefined in constructor.");
     }
@@ -124,14 +154,97 @@ class Enlay implements EnlayRequests {
     return data;
   }
 
-  public async createAdvertisement(options: {
-    slotId: string;
-    name: string;
-    redirectUrl?: string;
-    description: string;
-    dailyBudget: number;
-    image?: File;
-  }): Promise<GraphQLResponse<"createAdvertisement", string>> {
+  /**
+   * 
+   * @param advertiserId Advertiser identifier
+   * @returns Advertiser
+   */
+  public async getAdvertiser(advertiserId: string): Promise<GraphQLResponse<"currentAdvertiser", AdvertiserPayload>> {
+    if (!this.apiToken) {
+      throw new Error("API Token is undefined in constructor.");
+    }
+    const { data } = await this.client.request<
+      GraphQLResponse<"currentAdvertiser", AdvertiserPayload>
+    >({
+      method: "POST",
+      url: "/graphql",
+      data: {
+        query: `
+           query CurrentAdvertiser(
+                $id: String!
+            ) {
+              currentAdvertiser(
+                input: {
+                  id: $id
+                }
+              ) {
+                id
+                balance
+                apiOnlyMetadata {
+                    email
+                    externalUserId
+                    stripeCustomerId
+                }
+              }
+            }
+            `,
+        variables: {
+          id: advertiserId
+        },
+      },
+    });
+
+    return data;
+  }
+
+  /**
+   * 
+   * @param options Find advertisements filter
+   * @returns Advertisement array
+   */
+  public async getAdvertisements(options: FindAdvertisementsInput = {}): Promise<GraphQLResponse<"findAdvertisements", AdvertisementPayload[]>> {
+    if (!this.apiToken) {
+      throw new Error("API Token is undefined in constructor.");
+    }
+    const { data } = await this.client.request<
+      GraphQLResponse<"findAdvertisements", AdvertisementPayload[]>
+    >({
+      method: "POST",
+      url: "/graphql",
+      data: {
+        query: `
+            query FindAdvertisements(
+                $filter: JSON,
+            ) {
+                findAdvertisements(input: {
+                    filter: $filter
+                }) {
+                    id
+                    name
+                    description
+                    redirectUrl
+                    status
+                    imageUrl
+                    dailyBudget
+                    updatedAt
+                }
+            }
+        `,
+        variables: {
+          filter: options,
+        },
+      },
+    });
+
+    return data;
+  }
+
+  /**
+   * 
+   * @param options Create advertisement options
+   * @returns Advertisement identifier
+   */
+  public async createAdvertisement(options: CreateAdvertisementInput): Promise<GraphQLResponse<"createAdvertisement", string>> {
     if (!this.apiToken) {
       throw new Error("API Token is undefined in constructor.");
     }
@@ -148,6 +261,7 @@ class Enlay implements EnlayRequests {
                 $redirectUrl: String,
                 $description: String!,
                 $dailyBudget: Int!,
+                $advertiserId: String!,
                 $image: Upload
             ) {
               createAdvertisement(
@@ -157,6 +271,7 @@ class Enlay implements EnlayRequests {
                   redirectUrl: $redirectUrl
                   description: $description,
                   dailyBudget: $dailyBudget,
+                  advertiserId: $advertiserId
                 }
                 image: $image
               )
@@ -169,11 +284,15 @@ class Enlay implements EnlayRequests {
     return data;
   }
 
+  /**
+   * 
+   * @param categoryId Category ID
+   * @param filter Get slots filter
+   * @returns Slot array
+   */
   public async getSlots(
     categoryId: string,
-    filter: Partial<{
-      id: string;
-    }> = {}
+    filter: GetSlotsOptions = {}
   ): Promise<GraphQLResponse<"findSlots", SlotPayload[]>> {
     if (!this.apiToken) {
       throw new Error("API Token is undefined in constructor.");
@@ -211,10 +330,13 @@ class Enlay implements EnlayRequests {
     return data;
   }
 
+  /**
+   * 
+   * @param filter Get categories filter
+   * @returns Category array
+   */
   public async getCategories(
-    filter: Partial<{
-      id: string;
-    }> = {}
+    filter: GetCategoriesOptions = {}
   ): Promise<GraphQLResponse<"findCategories", CategoryPayload[]>> {
     if (!this.apiToken) {
       throw new Error("API Token is undefined in constructor.");
