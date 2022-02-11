@@ -58,8 +58,8 @@ class Enlay implements EnlayRequests {
       baseURL: baseUrl ?? "https://api.enlay.io",
       headers: apiToken
         ? {
-          Authorization: apiToken,
-        }
+            Authorization: apiToken,
+          }
         : {},
     });
   }

@@ -15,9 +15,19 @@ export interface AdvertisementPayload {
   imageUrl?: string;
 
   /**
+   * Slot ID
+   */
+  slotId?: string;
+
+  /**
    * Destination url
    */
   redirectUrl?: string;
+
+  /**
+   * Daily budget
+   */
+  dailyBudget?: number;
 
   customFields: {
     id: string;
