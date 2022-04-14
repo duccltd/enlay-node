@@ -70,7 +70,7 @@ class Enlay implements EnlayRequests {
 
   /**
    * Register a click on an advertisement
-   * @param placementId Placement id obtained from create placemens
+   * @param placementId Placement id obtained from create placements
    */
   public async registerClick(placementId: string): Promise<void> {
     await this.client.request({
