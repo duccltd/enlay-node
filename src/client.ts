@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from "axios";
-import { Advertisement, Advertiser, Category, Placement, Promotable, Slot } from "./entities";
 import * as Webhooks from "./webhooks";
 import * as Advertisements from "./resources/advertisement";
 import * as Advertisers from "./resources/advertiser";

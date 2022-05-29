@@ -1,6 +1,5 @@
 import { client } from "../client";
 import { Category } from "../entities";
-import { Paginated } from "../util";
 
 async function createCategory(payload: Pick<Category, "name" | "description" | "approval_mode" | "creation_type" | "creation_mode">): Promise<Category> {
     const { data } = await client.request({
