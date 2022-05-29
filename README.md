@@ -49,13 +49,10 @@ import enlay from "./enlay";
 
 app.get(`/products`, (req, res) => {
   // Fetch the advertisement placements
-  const { data, errors } = await enlay.createPlacements("slot-id", {
-    max: 2,
+  const _placements = await enlay.slots.createPlacements(slotId, {
+    max: 1,
     unique: true,
   });
-  if (errors) {
-    // Something went wrong at Enlay
-  }
 
   // ...Fetch products and send to client
 });
@@ -72,17 +69,14 @@ app.get(`/products`, (req, res) => {
   const products = await knex("products").select("*").limit(20);
 
   // Fetch the advertisement placements
-  const { data, errors } = await enlay.createPlacements("slot-id", {
-    max: 2,
+  const placements = await enlay.slots.createPlacements(slotId, {
+    max: 1,
     unique: true,
   });
-  if (errors) {
-    return res.json(products);
-  }
 
   // Fetch the correlated product ids
   const productIds = data.createPlacements.map((placement) => {
-    return placement.advertisement.customFields.id;
+    return placement.advertisement.custom_fields["id"];
   });
 
   // Fetch the sponsored products
@@ -182,7 +176,7 @@ export default function Products() {
           onClick={() => {
             // Fire a placement click async
             if (product.placementId) {
-              enlay.registerClick(product.placementId);
+              enlay.placements.clickPlacement(product.placementId);
             }
             router.push(`/products/${product.id}`);
           }}
@@ -209,7 +203,7 @@ export default function Products() {
   // Register views on all the products on first render
   useEffect(() => {
     async function registerView() {
-      await enlay.registerView(
+      await enlay.placements.viewPlacements(
         products
           .filter((product) => !!p.placementId)
           .map((product) => product.placementId)
