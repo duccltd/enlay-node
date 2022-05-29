@@ -1,25 +1,60 @@
-export interface AdvertisementPayload {
+import { Nullable } from "../util";
+
+export interface Advertisement {
+   /**
+    * Advertisement ID
+    */
+  id: string;
+
+  /**
+   * Slot ID
+   */
+  slotId: string;
+
+  /**
+   * Advertiser ID
+   */
+  advertiserId: string;
+
+  /**
+   * Publisher ID
+   */
+  publisherId: string;
+  
+  content: Nullable<string>;
+  
+  clickUrl: Nullable<string>;
+
+  /**
+   * Destination url
+   */
+  redirectUrl: string;
+
   /**
    * Name generated from promotable webhook or user input
    */
   name: string;
 
   /**
-   * Description generated from promotable webhook or user input
-   */
-  description?: string;
-
-  /**
    * Image url from promotable webhook or user input
    */
-  imageUrl?: string;
+  imageUrl: Nullable<string>;
 
   /**
-   * Destination url
+   * Description generated from promotable webhook or user input
    */
-  redirectUrl?: string;
+  description: Nullable<string>;
+  status: string;
+  approvalStatus: Nullable<string>;
 
-  customFields: {
-    id: string;
-  };
+  /**
+   * Daily budget
+   */
+  dailyBudget: number;
+
+  customFields: Nullable<object>;
+
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Nullable<Date>;
 }

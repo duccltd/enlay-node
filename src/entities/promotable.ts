@@ -1,4 +1,4 @@
-export interface PromotablePayload {
+export interface Promotable {
   /**
    * ID of the Promotable
    */
