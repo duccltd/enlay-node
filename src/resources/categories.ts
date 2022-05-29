@@ -1,7 +1,7 @@
 import { client } from "../client";
 import { Category } from "../entities";
 
-async function createCategory(payload: Pick<Category, "name" | "description" | "approval_mode" | "creation_type" | "creation_mode">): Promise<Category> {
+async function createCategory(payload: Pick<Category, "name" | "description" | "approvalMode" | "creationType" | "creationMode">): Promise<Category> {
     const { data } = await client.request({
         method: "POST",
         url: "/categories",
@@ -11,7 +11,7 @@ async function createCategory(payload: Pick<Category, "name" | "description" | "
     return data;
 }
 
-async function updateCategory(categoryId: string, payload: Pick<Category, "name" | "description" | "approval_mode" | "creation_type" | "creation_mode">): Promise<Category> {
+async function updateCategory(categoryId: string, payload: Pick<Category, "name" | "description" | "approvalMode" | "creationType" | "creationMode">): Promise<Category> {
     const { data } = await client.request({
         method: "PATCH",
         url: `/categories/${categoryId}`,

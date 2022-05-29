@@ -2,7 +2,7 @@ import { client } from "../client";
 import { Placement, Slot } from "../entities";
 import { PerformanceQuery, QueryList, RequiredAttrs } from "../util";
 
-async function createSlot(payload: Pick<Slot, "name" | "description" | "website" | "category_id" | "user_id" | "custom_fields">): Promise<Slot> {
+async function createSlot(payload: Pick<Slot, "name" | "description" | "website" | "categoryId" | "userId" | "customFields">): Promise<Slot> {
     const { data } = await client.request({
         method: "POST",
         url: "/slots",
@@ -12,7 +12,7 @@ async function createSlot(payload: Pick<Slot, "name" | "description" | "website"
     return data;
 }
 
-async function updateSlot(slotId: string, payload: Pick<Slot, "name" | "description" | "website" | "category_id" | "user_id" | "custom_fields">): Promise<Slot> {
+async function updateSlot(slotId: string, payload: Pick<Slot, "name" | "description" | "website" | "categoryId" | "userId" | "customFields">): Promise<Slot> {
     const { data } = await client.request({
         method: "PATCH",
         url: `/slots/${slotId}`,
@@ -31,10 +31,11 @@ async function getSlot(slotId: string): Promise<Slot> {
     return data;
 }
 
-async function listSlots(query: RequiredAttrs<Partial<QueryList>, "limit"> & Partial<Pick<Slot, "status" | "category_id">>): Promise<Slot[]> {
+async function listSlots(query: RequiredAttrs<Partial<QueryList>, "limit"> & Partial<Pick<Slot, "status" | "categoryId">>): Promise<Slot[]> {
     const { data } = await client.request({
         method: "GET",
-        url: `/slots?${new URLSearchParams(query as any).toString()}`,
+        url: `/slots`,
+        params: query,
     });
 
     return data;
@@ -43,7 +44,8 @@ async function listSlots(query: RequiredAttrs<Partial<QueryList>, "limit"> & Par
 async function getSlotPerformance(slotId: string, query: PerformanceQuery): Promise<any> {
     const { data } = await client.request({
         method: "GET",
-        url: `/slots/${slotId}/performance?${new URLSearchParams(query as any).toString()}`,
+        url: `/slots/${slotId}/performance`,
+        params: query,
     });
 
     return data;

@@ -14,22 +14,22 @@ export interface Placement {
   /**
    * Slot ID
    */
-  slot_id: string;
+  slotId: string;
 
   /**
    * Advertisement ID
    */
-  advertisement_id: string;
+  advertisementId: string;
 
   /**
    * Publisher ID
    */
-  publisher_id: string;
+  publisherId: string;
 
   /**
    * Serve ID
    */
-  serve_id: string;
+  serveId: string;
 
   /**
    * Advertisement metadata

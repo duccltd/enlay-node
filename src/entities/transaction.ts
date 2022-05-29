@@ -2,12 +2,12 @@ export interface Transaction {
   /**
    * Transaction ID
    */
-  transaction_id: string;
+  transactionId: string;
 
   /**
    * Advertiser ID
    */
-  advertiser_id: string;
+  advertiserId: string;
 
   /**
    * Timestamp
@@ -35,10 +35,10 @@ export interface Transaction {
   /**
    * Slot ID
    */
-  slot_id: any;
+  slotId: any;
 
   /**
    * Advertisement ID
    */
-  advertisement_id: any;
+  advertisementId: any;
 }

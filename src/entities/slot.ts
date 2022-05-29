@@ -9,17 +9,17 @@ export interface Slot {
   /**
    * Publisher ID
    */
-  publisher_id: string;
+  publisherId: string;
 
   /**
    * User ID
    */
-  user_id: string;
+  userId: string;
 
   /**
    * Category ID
    */
-  category_id: string;
+  categoryId: string;
 
   /**
    * Slot name
@@ -41,5 +41,5 @@ export interface Slot {
    */
   status: string;
 
-  custom_fields: Nullable<object>;
+  customFields: Nullable<object>;
 }

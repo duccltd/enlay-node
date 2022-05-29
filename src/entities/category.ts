@@ -9,7 +9,7 @@ export interface Category {
   /**
    * Publisher ID
    */
-  publisher_id: string;
+  publisherId: string;
 
   /**
    * Category name
@@ -24,21 +24,21 @@ export interface Category {
   /**
    * Approval mode
    */
-  approval_mode: Nullable<string>;
+  approvalMode: Nullable<string>;
 
   /**
    * Creation type
    */
-  creation_type: string;
+  creationType: string;
 
   /**
    * Metadata
    */
-  creation_mode: {
-    webhook_url: string;
+  creationMode: {
+    webhookUrl: string;
   } | {};
 
-  created_at: string;
-  updated_at: string;
-  deleted_at: Nullable<Date>;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: Nullable<Date>;
 }

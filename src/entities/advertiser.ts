@@ -9,7 +9,7 @@ export interface Advertiser {
   /**
    * Publisher ID
    */
-  publisher_id: string;
+  publisherId: string;
 
   /**
    * Advertiser email
@@ -17,5 +17,5 @@ export interface Advertiser {
   email: string;
 
 
-  discord_id: Nullable<string>;
+  discordId: Nullable<string>;
 }

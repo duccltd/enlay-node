@@ -9,26 +9,26 @@ export interface Advertisement {
   /**
    * Slot ID
    */
-  slot_id: string;
+  slotId: string;
 
   /**
    * Advertiser ID
    */
-  advertiser_id: string;
+  advertiserId: string;
 
   /**
    * Publisher ID
    */
-  publisher_id: string;
+  publisherId: string;
   
   content: Nullable<string>;
   
-  click_url: Nullable<string>;
+  clickUrl: Nullable<string>;
 
   /**
    * Destination url
    */
-  redirect_url: string;
+  redirectUrl: string;
 
   /**
    * Name generated from promotable webhook or user input
@@ -38,23 +38,23 @@ export interface Advertisement {
   /**
    * Image url from promotable webhook or user input
    */
-  image_url: Nullable<string>;
+  imageUrl: Nullable<string>;
 
   /**
    * Description generated from promotable webhook or user input
    */
   description: Nullable<string>;
   status: string;
-  approval_status: Nullable<string>;
+  approvalStatus: Nullable<string>;
 
   /**
    * Daily budget
    */
-  daily_budget: number;
+  dailyBudget: number;
 
-  custom_fields: Nullable<object>;
+  customFields: Nullable<object>;
 
-  created_at: Date;
-  updated_at: Date;
-  deleted_at: Nullable<Date>;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Nullable<Date>;
 }

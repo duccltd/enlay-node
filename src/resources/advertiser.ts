@@ -2,7 +2,7 @@ import { client } from "../client";
 import { Advertiser } from "../entities";
 import { Paginated, PerformanceQuery, QueryList, RequiredAttrs } from "../util";
 
-async function createAdvertiser(payload: Pick<Advertiser, "discord_id" | "email">): Promise<Advertiser> {
+async function createAdvertiser(payload: Pick<Advertiser, "discordId" | "email">): Promise<Advertiser> {
     const { data } = await client.request({
         method: "POST",
         url: "/advertisers",
@@ -24,7 +24,8 @@ async function getAdvertiser(advertiserId: string): Promise<Advertiser> {
 async function listAdvertisers(query: RequiredAttrs<Partial<QueryList>, "limit">): Promise<Paginated<Advertiser>> {
     const { data } = await client.request({
         method: "GET",
-        url: `/advertisers?${new URLSearchParams(query as any).toString()}`,
+        url: `/advertisers`,
+        params: query,
     });
 
     return data;
@@ -42,7 +43,8 @@ async function getAdvertiserBalance(advertiserId: string): Promise<{ amount: num
 async function getAdvertiserPerformance(advertiserId: string, query: PerformanceQuery): Promise<any> {
     const { data } = await client.request({
         method: "GET",
-        url: `/advertisers/${advertiserId}/performance?${new URLSearchParams(query as any).toString()}`,
+        url: `/advertisers/${advertiserId}/performance`,
+        params: query,
     });
 
     return data;

@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import * as Webhooks from "./webhooks";
 import * as Advertisements from "./resources/advertisement";
 import * as Advertisers from "./resources/advertiser";
@@ -7,6 +7,7 @@ import * as Images from "./resources/images";
 import * as Placements from "./resources/placements";
 import * as Slots from "./resources/slot";
 import * as Transactions from "./resources/transactions";
+import { camelizeKeys, decamelizeKeys } from "humps";
 
 type CreatePlacementOptions = Partial<{
   max: number;
@@ -65,6 +66,30 @@ class Enlay implements EnlayRequests {
           Authorization: apiToken,
         }
         : {},
+    });
+
+    client.interceptors.response.use((response) => {
+      if (
+        response.data &&
+        response.headers['content-type'] === 'application/json'
+      ) {
+        response.data = camelizeKeys(response.data);
+      }
+      return response;
+    });
+
+    // Axios middleware to convert all api requests to snake_case
+    client.interceptors.request.use((config: AxiosRequestConfig) => {
+      const newConfig = { ...config };
+      if (newConfig.headers?.['Content-Type'] === 'multipart/form-data')
+        return newConfig;
+      if (config.params) {
+        newConfig.params = decamelizeKeys(config.params);
+      }
+      if (config.data) {
+        newConfig.data = decamelizeKeys(config.data);
+      }
+      return newConfig;
     });
   }
 
