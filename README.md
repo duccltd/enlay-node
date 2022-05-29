@@ -76,7 +76,7 @@ app.get(`/products`, (req, res) => {
 
   // Fetch the correlated product ids
   const productIds = data.createPlacements.map((placement) => {
-    return placement.advertisement.custom_fields["id"];
+    return placement.advertisement.customFields["id"];
   });
 
   // Fetch the sponsored products
