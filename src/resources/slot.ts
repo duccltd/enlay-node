@@ -1,6 +1,6 @@
 import { client } from "../client";
 import { Placement, Slot } from "../entities";
-import { Paginated, PerformanceQuery, QueryList, RequiredAttrs } from "../util";
+import { PerformanceQuery, QueryList, RequiredAttrs } from "../util";
 
 async function createSlot(payload: Pick<Slot, "name" | "description" | "website" | "category_id" | "user_id" | "custom_fields">): Promise<Slot> {
     const { data } = await client.request({
