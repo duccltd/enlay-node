@@ -10,6 +10,9 @@ async function createImage(formData: FormData): Promise<{
 }> {
     const { data } = await client.request({
         method: "POST",
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
         url: "/images",
         data: formData,
     });

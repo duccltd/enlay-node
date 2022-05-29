@@ -18,19 +18,19 @@ export type IgnoreAttrs<T, K extends keyof T = keyof T> = T & {
 
 export interface QueryList {
   limit: number;
-  starting_after: string;
-  ending_before: string;
+  startingAfter: string;
+  endingBefore: string;
 };
 
 export interface Paginated<T> {
   object: string;
   url: string;
-  has_more: boolean;
+  hasMore: boolean;
   data: T[];
 }
 
 export interface PerformanceQuery {
-  start_time: string;
-  end_time?: string;
+  startTime: string;
+  endTime?: string;
   interval: string;
 }
