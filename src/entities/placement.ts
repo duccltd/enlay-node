@@ -1,13 +1,38 @@
-import { AdvertisementPayload } from "./advertisement";
+import { Advertisement } from "./advertisement";
 
-export interface PlacementPayload {
+export interface Placement {
   /**
    * Placement ID
    */
   id: string;
 
   /**
-   * Advertisement information
+   * Timestamp
    */
-  advertisement: AdvertisementPayload;
+  timestamp: string;
+
+  /**
+   * Slot ID
+   */
+  slot_id: string;
+
+  /**
+   * Advertisement ID
+   */
+  advertisement_id: string;
+
+  /**
+   * Publisher ID
+   */
+  publisher_id: string;
+
+  /**
+   * Serve ID
+   */
+  serve_id: string;
+
+  /**
+   * Advertisement metadata
+   */
+  advertisement: Advertisement;
 }

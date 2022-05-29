@@ -1,6 +1,7 @@
-export { AdvertiserPayload } from "./advertiser";
-export { CategoryPayload } from "./category";
-export { PromotablePayload } from "./promotable";
-export { PlacementPayload } from "./placement";
-export { AdvertisementPayload } from "./advertisement";
-export { SlotPayload } from "./slot";
+export { Advertiser } from "./advertiser";
+export { Category } from "./category";
+export { Promotable } from "./promotable";
+export { Placement } from "./placement";
+export { Advertisement } from "./advertisement";
+export { Slot } from "./slot";
+export { Transaction } from "./transaction";

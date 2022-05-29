@@ -1,7 +1,7 @@
 import Enlay from "../../src";
 import express, { Request, Response } from "express";
 import { GetPromotablesPayload } from "../../src/events";
-import { PromotablePayload } from "../../src/entities";
+import { Promotable } from "../../src/entities";
 
 const enlay = new Enlay({ apiToken: "api_token_123" });
 
@@ -27,7 +27,7 @@ app.post("/enlay/products", async (req: Request, res: Response) => {
   /**
    * Products to send back must follow the schema
    */
-  const products: PromotablePayload[] = [
+  const products: Promotable[] = [
     {
       id: "product_123",
       display_name: "Crystal ball",

@@ -1,13 +1,13 @@
-import { AdvertiserPayload, CategoryPayload } from "../entities";
+import { Advertiser, Category } from "../entities";
 
 export interface GetPromotablesPayload {
   /**
    * Advertiser details
    */
-  advertiser: AdvertiserPayload;
+  advertiser: Advertiser;
 
   /**
    * Category details
    */
-  category: CategoryPayload;
+  category: Category;
 }

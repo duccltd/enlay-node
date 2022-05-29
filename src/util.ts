@@ -15,3 +15,22 @@ export type OptionalAttrs<T, K extends keyof T = keyof T> = Pick<
 export type IgnoreAttrs<T, K extends keyof T = keyof T> = T & {
   [key in K]: never;
 };
+
+export interface QueryList {
+  limit: number;
+  starting_after: string;
+  ending_before: string;
+};
+
+export interface Paginated<T> {
+  object: string;
+  url: string;
+  has_more: boolean;
+  data: T[];
+}
+
+export interface PerformanceQuery {
+  start_time: string;
+  end_time?: string;
+  interval: string;
+}
