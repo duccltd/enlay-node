@@ -1,6 +1,13 @@
-import axios, { AxiosInstance } from "axios";
-import { PlacementPayload } from "./entities";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import * as Webhooks from "./webhooks";
+import * as Advertisements from "./resources/advertisement";
+import * as Advertisers from "./resources/advertiser";
+import * as Categories from "./resources/categories";
+import * as Images from "./resources/images";
+import * as Placements from "./resources/placements";
+import * as Slots from "./resources/slot";
+import * as Transactions from "./resources/transactions";
+import { camelizeKeys, decamelizeKeys } from "humps";
 
 type CreatePlacementOptions = Partial<{
   max: number;
@@ -31,7 +38,7 @@ interface EnlayRequests {
     options: CreatePlacementOptions
   ) => Promise<{
     data: {
-      createPlacements: PlacementPayload[];
+      createPlacements: any[];
     };
     errors: any[];
   }>;
@@ -42,19 +49,17 @@ interface IEnlayConfig {
   baseUrl?: string;
 }
 
+export let client: AxiosInstance;
+
 /**
  * @param {apiToken} API Token - This should not be exposed client side
  * @param {baseUrl} API Base
  */
 class Enlay implements EnlayRequests {
-  private readonly client: AxiosInstance;
-  private readonly apiToken?: string;
-
   constructor(config: IEnlayConfig = {}) {
     const { apiToken, baseUrl } = config;
 
-    this.apiToken = apiToken;
-    this.client = axios.create({
+    client = axios.create({
       baseURL: baseUrl ?? "https://api.enlay.io",
       headers: apiToken
         ? {
@@ -62,35 +67,62 @@ class Enlay implements EnlayRequests {
         }
         : {},
     });
+
+    client.interceptors.response.use((response) => {
+      if (
+        response.data &&
+        response.headers['content-type'] === 'application/json'
+      ) {
+        response.data = camelizeKeys(response.data);
+      }
+      return response;
+    });
+
+    // Axios middleware to convert all api requests to snake_case
+    client.interceptors.request.use((config: AxiosRequestConfig) => {
+      const newConfig = { ...config };
+      if (newConfig.headers?.['Content-Type'] === 'multipart/form-data')
+        return newConfig;
+      if (config.params) {
+        newConfig.params = decamelizeKeys(config.params);
+      }
+      if (config.data) {
+        newConfig.data = decamelizeKeys(config.data);
+      }
+      return newConfig;
+    });
   }
 
   get webhooks() {
     return Webhooks;
   }
 
-  /**
-   * Register a click on an advertisement
-   * @param placementId Placement id obtained from create placements
-   */
-  public async registerClick(placementId: string): Promise<void> {
-    await this.client.request({
-      method: "GET",
-      url: `/p/${placementId}/c`,
-    });
+  get advertisements() {
+    return Advertisements;
   }
 
-  /**
-   *
-   * @param placementIds Placement ids obtained from create placements
-   */
-  public async registerView(placementIds: string[]): Promise<void> {
-    await this.client.request({
-      method: "POST",
-      url: `/p/v`,
-      data: placementIds.map((pid) => ({
-        id: pid,
-      })),
-    });
+  get advertisers() {
+    return Advertisers;
+  }
+
+  get categories() {
+    return Categories;
+  }
+
+  get images() {
+    return Images;
+  }
+
+  get placements() {
+    return Placements;
+  }
+
+  get slots() {
+    return Slots;
+  }
+
+  get transactions() {
+    return Transactions;
   }
 
   /**
@@ -102,9 +134,9 @@ class Enlay implements EnlayRequests {
   public async createPlacements(
     slotId: string,
     options: Partial<CreatePlacementOptions> = { max: 1, unique: true }
-  ): Promise<GraphQLResponse<"createPlacements", PlacementPayload[]>> {
-    const { data } = await this.client.request<
-      GraphQLResponse<"createPlacements", PlacementPayload[]>
+  ): Promise<GraphQLResponse<"createPlacements", any[]>> {
+    const { data } = await client.request<
+      GraphQLResponse<"createPlacements", any[]>
     >({
       method: "POST",
       url: "/graphql",

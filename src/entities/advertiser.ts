@@ -1,13 +1,21 @@
 import { Nullable } from "../util";
 
-export interface AdvertiserPayload {
+export interface Advertiser {
+  /**
+   * Advertiser ID
+   */
+  id: string;
+
+  /**
+   * Publisher ID
+   */
+  publisherId: string;
+
   /**
    * Advertiser email
    */
   email: string;
 
-  /**
-   * Advertiser discord identifier
-   */
-  discord_id: Nullable<string>;
+
+  discordId: Nullable<string>;
 }
